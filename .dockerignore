@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Databases (don't copy local DB to container)
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Environment files (use Space secrets instead)
+.env
+.env.local
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (except main README)
+DESIGN.md
+hfREADme.md
+
+# Test files
+test_*.py
+*_test.py
+
+# Screenshots and temporary files
+screenshots/
+*.tmp
+playwright/.cache/
+selenium-profile/
+webdriver/
+
+# Docker files (no need to copy into image)
+Dockerfile
+.dockerignore
+
+# CI/CD
+.github/
