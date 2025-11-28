@@ -1,0 +1,55 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+env/
+venv/
+ENV/
+.venv/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# OS files
+.DS_Store
+*.log
+
+# IDE configs
+.idea/
+.vscode/
+
+# Cache & reports
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables
+.env
+.env.local
+
+# Temporary & swap files
+*.swp
+*.swo
+*~
+*.tmp
+
+# Downloads
+playwright/.cache/
+selenium-profile/
+webdriver/
+chromedriver/
+chromedriver.exe
+
+# Generated screenshots / artifacts
+screenshots/
