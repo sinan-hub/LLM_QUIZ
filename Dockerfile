@@ -1,30 +1,66 @@
-FROM mcr.microsoft.com/playwright/python:latest
+# Use Python 3.11 slim image
+FROM python:3.11-slim
 
-# Use a reliable Playwright base image which already includes browser binaries
+# Set working directory
 WORKDIR /app
 
-# Avoid caching issues by installing python dependencies first
-COPY requirements.txt /app/requirements.txt
-
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install --no-cache-dir -r /app/requirements.txt
-
-# Ensure Playwright installs any missing platform deps and browsers
-RUN python -m playwright install --with-deps
-
-# Optional: install ffmpeg for media processing
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg \
+    ca-certificates \
+    fonts-liberation \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libatk1.0-0 \
+    libatspi2.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libdrm2 \
+    libgbm1 \
+    libgtk-3-0 \
+    libnspr4 \
+    libnss3 \
+    libwayland-client0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxkbcommon0 \
+    libxrandr2 \
+    xdg-utils \
     ffmpeg \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy app source
-COPY . /app
+# Copy requirements first for better caching
+COPY requirements.txt .
 
-# Use a non-root runtime user where possible (Playwright images create pwuser)
-USER root
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-ENV PORT 7860
+# Install Playwright and browsers
+RUN playwright install chromium
+RUN playwright install-deps chromium
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p screenshots
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV PORT=7860
+
+# Expose port for Hugging Face Spaces
 EXPOSE 7860
 
-# Default process is the Gradio app created at app.py
-CMD ["python", "app.py"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import requests; requests.get('http://localhost:7860/health')" || exit 1
+
+# Run the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
