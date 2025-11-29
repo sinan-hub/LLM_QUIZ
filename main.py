@@ -48,7 +48,17 @@ class PromptTestRequest(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "LLM Quiz Solver API", "version": "1.0.0"}
+    return {
+        "message": "LLM Quiz Solver API", 
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "solve_quiz": "/solve-quiz",
+            "test_prompt": "/test-prompt",
+            "available_models": "/models",
+            "get_attempt": "/attempt/{attempt_id}"
+        }
+    }
 
 @app.get("/health")
 async def health():
